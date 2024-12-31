@@ -1,6 +1,6 @@
 # database
 from database import engine, User, Task
-from sqlalchemy import func, select, update, delete, and_
+from sqlalchemy import select, update, delete, and_
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
 
@@ -74,11 +74,12 @@ def login():
     with (Session(engine) as session):
         with session.begin():
             token = session.scalar(select(User.token).where(condition))
+            username = session.scalar(select(User.username).where(condition))
                 
     if not token:
         return {'error': 'User not found'}, 401
     
-    return {'token': token}, 200
+    return {'token': token, 'name': username}, 200
 
 # --- tasks
 
