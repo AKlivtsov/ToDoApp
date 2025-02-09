@@ -4,9 +4,13 @@ from dotenv import load_dotenv
 from sqlalchemy import create_engine, ForeignKey
 from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.orm import mapped_column, Mapped, relationship
+from sqlalchemy_utils import database_exists, create_database
 
 load_dotenv()
 engine = create_engine(os.getenv("DATABASE"))
+
+if not database_exists(engine.url):
+    create_database(engine.url)
 
 
 class Base(DeclarativeBase):
@@ -30,5 +34,3 @@ class Task(Base):
     description: Mapped[str]
     user: Mapped["User"] = relationship(back_populates="task", uselist=False)
     user_fk = mapped_column(ForeignKey('users.id'))
-
-# Base.metadata.create_all(engine)

@@ -2,3 +2,4 @@ flask
 sqlalchemy
 python-dotenv
 reflex==0.6.7
+sqlalchemy-utils==0.41.2
