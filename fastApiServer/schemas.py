@@ -18,7 +18,7 @@ class LoginUser(BaseModel):
     
 
 class RegUser(BaseModel):
-    name: str
+    username: str
     email: EmailStr
     password: str
     
@@ -31,3 +31,8 @@ class RegUser(BaseModel):
             raise ValueError("Некорректная длина почты")
         
         return to_validate
+    
+    
+class Task(BaseModel):
+    title: str
+    description: str

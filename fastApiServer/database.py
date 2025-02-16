@@ -1,16 +1,13 @@
 import os
 from dotenv import load_dotenv
 
-from sqlalchemy import create_engine, ForeignKey
+from sqlalchemy import create_engine, ForeignKey, inspect
 from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.orm import mapped_column, Mapped, relationship
 from sqlalchemy_utils import database_exists, create_database
 
 load_dotenv()
 engine = create_engine(os.getenv("DATABASE_URL"))
-
-if not database_exists(engine.url):
-    create_database(engine.url)
 
 
 class Base(DeclarativeBase):
@@ -29,7 +26,13 @@ class User(Base):
 class Task(Base):
     __tablename__ = 'tasks'
 
-    name: Mapped[str] = mapped_column(nullable=False)
+    title: Mapped[str] = mapped_column(nullable=False)
     description: Mapped[str]
     user: Mapped["User"] = relationship(back_populates="task", uselist=False)
     user_fk = mapped_column(ForeignKey('users.id'))
+
+
+# Check if tables exist and create if not
+inspector = inspect(engine)
+if not inspector.get_table_names():
+    Base.metadata.create_all(engine)
