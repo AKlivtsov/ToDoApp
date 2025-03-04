@@ -18,6 +18,16 @@ from fastapi.responses import JSONResponse
 import hashlib
 from uuid import uuid4
 
+def check_authorship(user_id: str, task_id: str) -> bool:
+    with (Session(engine) as session):
+        with session.begin():
+            task_fk = session.scalar(select(Task.user_fk).where(Task.id==task_id))
+        
+    if user_id != task_fk:
+        return False
+    
+    return True
+            
 def reg_user(user: RegUser) -> str | JSONResponse:
     with Session(engine) as session:
         with session.begin():
@@ -70,7 +80,7 @@ def login_user(user: LoginUser) -> str | JSONResponse:
             
             return token
         
-def create_task(task: TaskSchm, user_id: str) -> list | JSONResponse:
+def create_task(task: TaskSchm, user_id: str) -> dict | JSONResponse:
     with (Session(engine) as session):
         with session.begin():
             task_data = task.model_dump()
@@ -84,3 +94,35 @@ def create_task(task: TaskSchm, user_id: str) -> list | JSONResponse:
             session.commit()
     
     return {"id": task_id, "title": task_data["title"], "description": task_data["description"]}
+
+def update_task(task: TaskSchm, task_id: int, user_id: str) -> dict | JSONResponse:
+    with (Session(engine) as session):
+        with session.begin():
+            task_data = task.model_dump()
+            session.execute(
+                update(Task)
+                .where(Task.id == task_id)
+                .values(**task_data)
+                )
+            
+            session.commit()
+
+    return {"id": task_id, "title": task_data["title"], "description": task_data["description"]}
+
+def delete_task(task_id: str, user_id: str) -> bool:
+    try:
+
+        with (Session(engine) as session):
+            with session.begin():
+                session.execute(
+                    delete(Task)
+                    .where(Task.id == task_id)
+                    )
+            
+                session.commit()
+
+        return True
+    
+    except Exception as e:
+        print(e) # do some logging here!!!
+        return False

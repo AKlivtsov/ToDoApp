@@ -63,6 +63,63 @@ def create_task(
     task = rep.create_task(item, user_id)
     return task
 
+@app.put( "/api/todos/{task_id}")
+def update_task(
+    task_id:int,
+    item: Task,
+    token: str = Header(..., description="Authorization token", alias="Authorization")):
+
+    # auth
+    check_res = check_auth(token)
+    if isinstance(check_res, JSONResponse):
+        return check_res
+    else:
+        user_id = check_res
+
+    # check authorship
+    check = rep.check_authorship(user_id=user_id, task_id=task_id)
+    if check:
+        return JSONResponse(
+            status_code=403, 
+            content={
+                "status": "error",
+                "message": "Вы не являетесь автором задачи."
+            }
+        )
+    
+    task = rep.update_task(task_id=task_id, task=item, user_id=user_id)
+    return task
+
+
+@app.delete("/api/todos/{task_id}", status_code=204)
+def delete_task(
+    task_id:int,
+    token: str = Header(..., description="Authorization token", alias="Authorization")):
+
+    # auth
+    check_res = check_auth(token)
+    if isinstance(check_res, JSONResponse):
+        return check_res
+    else:
+        user_id = check_res
+    
+    # check authorship
+    check = rep.check_authorship(user_id=user_id, task_id=task_id)
+    if check:
+        return JSONResponse(
+            status_code=403, 
+            content={
+                "status": "error",
+                "message": "Вы не являетесь автором задачи."
+            }
+        )
+    
+    is_succses = rep.delete_task(task_id=task_id, user_id=user_id)
+    if is_succses:
+        return Response(status_code=204)
+    
+    return Response(status_code=500)
+
 if __name__ == "__main__":
     load_dotenv()
     server_address = os.getenv("SERVER_ADDRESS")
