@@ -126,3 +126,20 @@ def delete_task(task_id: str, user_id: str) -> bool:
     except Exception as e:
         print(e) # do some logging here!!!
         return False
+
+def get_tasks(user_id: str, limit: int, page: int) -> dict:
+    with (Session(engine) as session):
+        with session.begin():
+            tasks = []
+            ids = session.scalars(
+                select(Task.id, Task.title, Task.description)
+                .where(Task.user_fk == user_id)
+                .offset(limit*(page-1)).limit(limit)
+                ).all()
+
+            for id in ids:
+                title = session.scalar(select(Task.title).where(Task.id == id))
+                desc = session.scalar(select(Task.description).where(Task.id == id))
+                tasks.append({"id": id, "title": title, "description": desc})
+
+    return {"page": page, "limit": limit, "total": len(tasks), "data": tasks}

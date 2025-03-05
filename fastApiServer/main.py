@@ -90,7 +90,6 @@ def update_task(
     task = rep.update_task(task_id=task_id, task=item, user_id=user_id)
     return task
 
-
 @app.delete("/api/todos/{task_id}", status_code=204)
 def delete_task(
     task_id:int,
@@ -119,6 +118,23 @@ def delete_task(
         return Response(status_code=204)
     
     return Response(status_code=500)
+
+@app.get("/api/todos")
+def get_task(
+    token: str = Header(..., description="Authorization token", alias="Authorization"),
+    page: str = Header(..., description="page", alias="Page"),
+    limit: str = Header(..., description="limit of the items", alias="Limit")):
+
+    # auth
+    check_res = check_auth(token)
+    if isinstance(check_res, JSONResponse):
+        return check_res
+    else:
+        user_id = check_res
+
+    tasks = rep.get_tasks(user_id=user_id, limit=int(limit), page=int(page))
+    return tasks
+
 
 if __name__ == "__main__":
     load_dotenv()
