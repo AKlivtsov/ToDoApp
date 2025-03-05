@@ -21,10 +21,10 @@ Well, basicaly it's social network with users and tasks. Simply lovely, huh?
   1. Again. There is no client. DO IT YOURSELF WITH POSTMAN, MAN
 
 ## Currently in work!:
- 1. FastAPI migration + refactoring
+ 1. Refactoring server
 
 ## What's next?
- 1. Re-write server on FastAPI (Flask server will be deleted)
+ 1. Refactor server
  2. Create clients for telegram via reflex-the-web-framework (just Reflex)
 
 ## ROAD TO ITMO
