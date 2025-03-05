@@ -1,18 +1,30 @@
 # REST-full api of ToDo app
 
-Well, basicaly it's tiny server(Flask+sqlalchemy) and web client(reflex), aaand.. nothing more.
+Well, basicaly it's social network with users and tasks. Simply lovely, huh?
 
 # how to start it?
-## server
+## server (source code) 
  1. create venv with python 3.13 (i use pyenv to do it, so do you)
  2. install requirements.txt
  3. create .env file with DATABASE_URL (use any db as you like)
  4. run app.py
  5. enjoy
-## web client
- 1. Idk, i can't remember how to do it. Tryna fix it as soon as posible)
+
+## server (docker)
+ 1. There's no one yet. Yep. Working on it.
+
+## client
+ 1. Again. There is no client. DO IT YOURSELF WITH POSTMAN, MAN
+
+# Currently in work!:
+ 1. FastAPI migration + refactoring
 
 # What's next?
- 1. Re-write server on FastAPI (I don't want to write api documentation. So, yep, i choose FastAPI)
- 2. Fix webClient. (maybe re-write it)
- 3. !!!MAYBE!!! Make sick-ass web and server apps, that conqure all of this segment of these apps. (ha-ha)
+ 1. Re-write server on FastAPI (Flask server will be deleted)
+ 2. Create clients for telegram via reflex-the-web-framework (just Reflex)
+
+# ROAD TO ITMO
+    1. Fuck it, make social network with users and task 
+    2. There's gonna be telegram mini apps/bot, web, standalone clients (+ self hosted server)
+    3. There's gonna be two types of tasks: private (only user can see it) and public (all users can see it on a person's profile)
+
