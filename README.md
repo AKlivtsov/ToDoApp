@@ -1,4 +1,4 @@
-# REST-full api of ToDo app
+# ToDo-social network app
 
 Well, basicaly it's social network with users and tasks. Simply lovely, huh?
 
@@ -8,24 +8,27 @@ Well, basicaly it's social network with users and tasks. Simply lovely, huh?
 
 ## how to start it?
 - server (source code) 
-  1. create venv with python 3.13 (i use pyenv to do it, so do you)
+  1. create venv with python 3.12 (i use pyenv to do it, but u can use whatever you like most)
   2. install requirements.txt
   3. create .env file with DATABASE_URL (use any db as you like)
-  4. run app.py
-  5. enjoy
+  4. add REDIS_HOST, REDIS_PORT to .env file
+  5. run main.py
+  6. enjoy
 
 - server (docker)
   1. There's no one yet. Yep. Working on it.
 
 - client
-  1. Again. There is no client. DO IT YOURSELF WITH POSTMAN, MAN
+  1. In work )
 
 ## Currently in work!:
- 1. Refactoring server
+ 1. Client!!!!
 
 ## What's next?
- 1. Refactor server
- 2. Create clients for telegram via reflex-the-web-framework (just Reflex)
+ 1. Create clients for telegram via reflex-the-web-framework (just Reflex)
+ 2. Create docker container
+ 3. Go to production, baby
+ 4. Add users profiles and friends list
 
 ## ROAD TO ITMO
 1. Fuck it, make social network with users and task 
