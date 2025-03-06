@@ -28,7 +28,7 @@ def check_authorship(user_id: str, task_id: str) -> bool:
     
     return True
             
-def reg_user(user: RegUser) -> str | JSONResponse:
+def reg_user(user: RegUser) -> None | str:
     with Session(engine) as session:
         with session.begin():
             user_data = user.model_dump()
@@ -36,13 +36,7 @@ def reg_user(user: RegUser) -> str | JSONResponse:
             # check if email already exists
             email = session.scalar(select(User.email).where(User.email == user_data['email']))
             if email:
-                return JSONResponse(
-                    status_code=400, 
-                    content={
-                        "status": "error",
-                        "message": "Такой email уже зарегистрирован"
-                    }
-                )
+                return None
             
             # to db
             user_data['password'] = hashlib.sha3_224(user_data["password"].encode()).hexdigest()
@@ -56,7 +50,7 @@ def reg_user(user: RegUser) -> str | JSONResponse:
             
             return token
         
-def login_user(user: LoginUser) -> str | JSONResponse:
+def login_user(user: LoginUser) -> None | str:
     with Session(engine) as session:
         with session.begin():
             user_data = user.model_dump()
@@ -65,13 +59,7 @@ def login_user(user: LoginUser) -> str | JSONResponse:
             # auth
             password = session.scalar(select(User.password).where(User.email == user_data['email']))
             if password != user_data['password'] or not password:
-                return JSONResponse(
-                    status_code=400,
-                    content={
-                        "status": "error",
-                        "message": "Неверный email или пароль."
-                    }
-                )
+                return None
             
             # cache
             user_id = session.scalar(select(User.id).where(User.email == user_data['email']))
@@ -80,7 +68,7 @@ def login_user(user: LoginUser) -> str | JSONResponse:
             
             return token
         
-def create_task(task: TaskSchm, user_id: str) -> dict | JSONResponse:
+def create_task(task: TaskSchm, user_id: str) -> str:
     with (Session(engine) as session):
         with session.begin():
             task_data = task.model_dump()
@@ -93,9 +81,9 @@ def create_task(task: TaskSchm, user_id: str) -> dict | JSONResponse:
             task_id = new_task.id
             session.commit()
     
-    return {"id": task_id, "title": task_data["title"], "description": task_data["description"]}
+    return task_id, task_data["title"], task_data["description"]
 
-def update_task(task: TaskSchm, task_id: int, user_id: str) -> dict | JSONResponse:
+def update_task(task: TaskSchm, task_id: int) -> str:
     with (Session(engine) as session):
         with session.begin():
             task_data = task.model_dump()
@@ -107,11 +95,10 @@ def update_task(task: TaskSchm, task_id: int, user_id: str) -> dict | JSONRespon
             
             session.commit()
 
-    return {"id": task_id, "title": task_data["title"], "description": task_data["description"]}
+    return task_id, task_data["title"], task_data["description"]
 
 def delete_task(task_id: str, user_id: str) -> bool:
     try:
-
         with (Session(engine) as session):
             with session.begin():
                 session.execute(
@@ -127,7 +114,7 @@ def delete_task(task_id: str, user_id: str) -> bool:
         print(e) # do some logging here!!!
         return False
 
-def get_tasks(user_id: str, limit: int, page: int) -> dict:
+def get_tasks(user_id: str, limit: int, page: int) -> list:
     with (Session(engine) as session):
         with session.begin():
             tasks = []
@@ -142,4 +129,4 @@ def get_tasks(user_id: str, limit: int, page: int) -> dict:
                 desc = session.scalar(select(Task.description).where(Task.id == id))
                 tasks.append({"id": id, "title": title, "description": desc})
 
-    return {"page": page, "limit": limit, "total": len(tasks), "data": tasks}
+    return tasks
