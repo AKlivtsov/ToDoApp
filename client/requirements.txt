@@ -54,7 +54,7 @@ python-socketio==5.12.1
 PyYAML==6.0.2
 readme_renderer==44.0
 redis==5.2.1
-reflex==0.6.7
+reflex==0.7.1
 reflex-chakra==0.6.3
 reflex-hosting-cli==0.1.35
 requests==2.32.3
