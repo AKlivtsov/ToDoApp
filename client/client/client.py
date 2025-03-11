@@ -3,32 +3,14 @@
 import reflex as rx
 
 from rxconfig import config
+from .state import State
 from .views.navbar import navbar
+from .views.taskItem import task_item
+from .views.login import login_default
+from .views.reg import signup_default
 
 
-class State(rx.State):
-    tasks : list[list[str]] = [
-        ["Task1", "deesc 1", "1"],
-        ["Task1", "deesc 1", "2"],
-        ["Task3", "deesc 1", "3"],
-        ["Task89", "deesc 1", "4"],
-    ]
-
-def task_item(title: str, desc: str, id_:str) -> rx.Component:
-    return rx.card(
-        rx.hstack(
-            rx.vstack(
-                rx.heading(title),
-                rx.text(desc),
-                ),
-            rx.spacer(),
-            rx.button(
-                rx.icon("pencil"),
-            ),
-        ),
-        width="90%",
-    )
-
+@rx.page(route="/")
 def index() -> rx.Component:
     return rx.vstack(
         navbar(),
@@ -39,7 +21,7 @@ def index() -> rx.Component:
                 lambda task: task_item(
                     title=task[0],
                     desc=task[1],
-                    id_=task[2]
+                    id_=task[2],
                     )
             ),
             width="100%",
@@ -47,5 +29,16 @@ def index() -> rx.Component:
         ),
     )
 
+@rx.page(route="/login")
+def login() -> rx.Component:
+    return rx.vstack(
+        login_default()
+        )
+
+@rx.page(route="/sign-up")
+def login() -> rx.Component:
+    return rx.vstack(
+        signup_default()
+        )
+
 app = rx.App()
-app.add_page(index)
