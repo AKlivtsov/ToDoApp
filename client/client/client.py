@@ -1,5 +1,3 @@
-"""Welcome to Reflex! This file outlines the steps to create a basic app."""
-
 import reflex as rx
 
 from rxconfig import config
@@ -18,18 +16,14 @@ def index() -> rx.Component:
         rx.vstack(
             rx.foreach(
                 State.tasks,
-                lambda task: task_item(
-                    title=task[0],
-                    desc=task[1],
-                    id_=task[2],
-                    )
-            ),
+                task_item
+                ),
             width="100%",
             align="center",
         ),
     )
 
-@rx.page(route="/login")
+@rx.page(route="/sign-in")
 def login() -> rx.Component:
     return rx.vstack(
         login_default()

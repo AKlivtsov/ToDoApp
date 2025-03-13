@@ -75,7 +75,7 @@ def signup_default() -> rx.Component:
             rx.button("Register", size="3", width="100%"),
             rx.center(
                 rx.text("Already registered?", size="3"),
-                rx.link("Sign in", href="/login", size="3"),
+                rx.link("Sign in", href="/sign-in", size="3"),
                 opacity="0.8",
                 spacing="2",
                 direction="row",
