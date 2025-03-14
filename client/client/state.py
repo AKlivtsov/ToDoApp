@@ -27,6 +27,7 @@ class State(rx.State):
                 
     @rx.event
     async def handle_reg(self, user_data: dict):
+        print(user_data)
         async with httpx.AsyncClient() as client:
             response = await client.post(self._base_url + "/auth/sign-up", json=user_data)
 
@@ -48,3 +49,13 @@ class State(rx.State):
 
             except KeyError:
                 self.token = ""
+
+    @rx.event
+    async def create_task(self, task_data: dict):
+        headers= {"Authorization": self.token}
+        async with httpx.AsyncClient() as client:
+            response = await client.post(self._base_url + "/api/todos", json=task_data, headers=headers)
+
+            if response.status_code == 200:
+                await self.update_tasks()
+            # make error pop-up 

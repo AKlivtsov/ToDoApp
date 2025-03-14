@@ -1,7 +1,10 @@
 import reflex as rx
 
+from client.state import State
+
 def signup_default() -> rx.Component:
     return rx.card(
+        rx.form(
         rx.vstack(
             rx.center(
                 rx.badge(
@@ -30,6 +33,26 @@ def signup_default() -> rx.Component:
             ),
             rx.vstack(
                 rx.text(
+                    "Username",
+                    size="3",
+                    weight="medium",
+                    type="username",
+                    text_align="left",
+                    width="100%",
+                ),
+                rx.input(
+                    placeholder="user",
+                    type="",
+                    size="3",
+                    width="100%",
+                    name="username",
+                ),
+                justify="start",
+                spacing="2",
+                width="100%",
+            ),
+            rx.vstack(
+                rx.text(
                     "Email address",
                     size="3",
                     weight="medium",
@@ -41,6 +64,7 @@ def signup_default() -> rx.Component:
                     type="email",
                     size="3",
                     width="100%",
+                    name="email",
                 ),
                 justify="start",
                 spacing="2",
@@ -59,20 +83,13 @@ def signup_default() -> rx.Component:
                     type="password",
                     size="3",
                     width="100%",
+                    name="password",
                 ),
                 justify="start",
                 spacing="2",
                 width="100%",
             ),
-            rx.box(
-                rx.checkbox(
-                    "Agree to Terms and Conditions",
-                    default_checked=True,
-                    spacing="2",
-                ),
-                width="100%",
-            ),
-            rx.button("Register", size="3", width="100%"),
+            rx.button("Register", size="3", width="100%", type="submit", on_click=rx.redirect("/")),
             rx.center(
                 rx.text("Already registered?", size="3"),
                 rx.link("Sign in", href="/sign-in", size="3"),
@@ -82,6 +99,9 @@ def signup_default() -> rx.Component:
             ),
             spacing="6",
             width="100%",
+        ),
+        on_submit=State.handle_reg,
+        reset_on_submit=True,
         ),
         size="4",
         max_width="28em",
