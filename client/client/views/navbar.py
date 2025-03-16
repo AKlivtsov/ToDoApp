@@ -1,5 +1,8 @@
 import reflex as rx
 
+from .addTask import task_dialog
+from client.state import State
+
 def navbar():
     return rx.flex(
         rx.button(
@@ -15,23 +18,12 @@ def navbar():
             on_click=rx.redirect("/sign-in"), # remove that when sidebar ready
         ),
         rx.spacer(),
-        rx.button(
-            rx.icon(tag="plus", size=18),
-            rx.heading("Add task", size='3'),
-            color_scheme='indigo',
-            radius="large",
-            align="center",
-            variant="surface",
-            padding="0.65rem",
-        ),
-        rx.button(
-            rx.icon(tag="rotate-cw", size=18),
-            color_scheme='indigo',
-            radius="large",
-            align="center",
-            variant="surface",
-            padding="0.65rem",
-        ),
+        rx.spinner(
+            size="2",
+            loading=State.is_loading
+            ),
+        rx.spacer(),
+        task_dialog(),
         rx.color_mode.button(
             color_scheme='indigo',
             radius="large",

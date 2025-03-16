@@ -1,6 +1,7 @@
 import reflex as rx 
 
 from client.state import State
+from .editTask import edit_dialog
 
 def task_item(task: dict) -> rx.Component:
     return rx.card(
@@ -11,14 +12,7 @@ def task_item(task: dict) -> rx.Component:
                 ),
             rx.spacer(),
             rx.vstack(
-                rx.button(
-                    rx.icon("pencil", size=20),
-                    color_scheme='indigo',
-                    radius="large",
-                    align="center",
-                    variant="surface",
-                    padding="0.65rem",
-                ),
+                edit_dialog(task),
                 rx.button(
                     rx.icon("trash", size=20),
                     color_scheme='ruby',
