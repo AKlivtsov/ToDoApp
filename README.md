@@ -17,7 +17,7 @@ Well, basicaly it's social network with users and tasks. Simply lovely, huh?
 
 - server (docker)
   1. clone repo 
-  2. exec this: docker buildx build --platform linux/amd64,linux/arm64 -t todoapp-server .
+  2. exec this: docker build -t todoapp-server .
 
 - client
   1. In work )
