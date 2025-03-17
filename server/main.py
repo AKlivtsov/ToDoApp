@@ -171,4 +171,4 @@ if __name__ == "__main__":
     load_dotenv()
     server_address = os.getenv("SERVER_ADDRESS")
     host, port = server_address.split(":")
-    uvicorn.run("main:app", host=host, port=int(port), reload=True)
+    uvicorn.run("main:app", host=host, port=int(port))
