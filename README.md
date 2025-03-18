@@ -10,20 +10,30 @@ Well, basicaly it's social network with users and tasks. Simply lovely, huh?
 - server (source code) 
   1. create venv with python 3.12 (i use pyenv to do it, but u can use whatever you like most)
   2. install requirements.txt
-  3. create .env file with DATABASE_URL (use any db as you like)
-  4. add REDIS_HOST, REDIS_PORT to .env file
+  3. create .env
+  4. add these vars to .env file:
+    - SERVER_ADDRESS
+    - POSTGRES_USERNAME
+    - POSTGRES_PASSWORD
+    - POSTGRES_HOST
+    - POSTGRES_PORT
+    - POSTGRES_DB
+    - REDIS_HOST
+    - REDIS_PORT
+
   5. run main.py
   6. enjoy
 
-- server (docker)
-  1. clone repo 
-  2. exec this: docker build -t todoapp-server .
+- server (docker compsoe) (best way!)
+  -just execute these: 
+    1. docker compose build
+    2. docker compose up -d 
 
 - client
-  1. In work )
+  1. In work
 
 ## Currently in work!:
- 1. Client!!!!
+ 1. Client
 
 ## What's next?
  1. Create clients for telegram via reflex-the-web-framework (just Reflex)
@@ -35,4 +45,3 @@ Well, basicaly it's social network with users and tasks. Simply lovely, huh?
 1. Fuck it, make social network with users and task 
 2. There's gonna be telegram mini apps/bot, web, standalone clients (+ self hosted server)
 3. There's gonna be two types of tasks: private (only user can see it) and public (all users can see it on a person's profile)
-

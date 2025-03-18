@@ -1,0 +1,71 @@
+services:
+  server:
+    build: server/
+    container_name: todoapp-server
+    restart: unless-stopped
+    command: python ./main.py
+    
+    environment:
+      - SERVER_ADDRESS=0.0.0.0:8080
+
+      - REDIS_HOST=cachie
+      - REDIS_PORT=6379
+
+      - POSTGRES_HOST=db
+      - POSTGRES_PORT=5432
+      - POSTGRES_USERNAME=todoapp
+      - POSTGRES_PASSWORD=122365
+      - POSTGRES_DB=main
+
+    ports:
+      - 8080:8080
+
+    depends_on:
+      - db
+      - cachie
+
+    links:
+      - db
+
+    networks:
+      - inner_network
+  
+  cachie:
+    image: redis:alpine
+    container_name: cachie-redis
+
+    volumes:
+      - ./redis:/data
+
+    ports:
+      - '6379:6379'
+
+    networks:
+      - inner_network
+
+  db:
+    image: postgres
+    container_name: db-postgres
+    restart: unless-stopped
+
+    volumes: 
+      - db:/var/lib/postgresql/data
+
+    environment:
+      - POSTGRES_USER=todoapp
+      - POSTGRES_PASSWORD=122365
+      - POSTGRES_DB=main
+
+    ports:
+      - '5432:5432'
+
+    networks:
+      - inner_network
+
+networks:
+  inner_network:
+    name: inner_network
+
+volumes:
+  db:
+    driver: local

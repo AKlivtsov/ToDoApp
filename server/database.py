@@ -1,13 +1,21 @@
 import os
 from dotenv import load_dotenv
 
-from sqlalchemy import create_engine, ForeignKey, inspect
+from sqlalchemy import create_engine, ForeignKey, inspect, URL
 from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.orm import mapped_column, Mapped, relationship
 from sqlalchemy_utils import database_exists, create_database
 
 load_dotenv()
-engine = create_engine(os.getenv("DATABASE_URL"))
+DB_URL = URL.create(
+    "postgresql",
+    username=os.getenv("POSTGRES_USERNAME"),
+    password=os.getenv("POSTGRES_PASSWORD"),
+    host=os.getenv("POSTGRES_HOST"),
+    port=os.getenv("POSTGRES_PORT"),
+    database=os.getenv("POSTGRES_DB"),
+)
+engine = create_engine(DB_URL)
 
 
 class Base(DeclarativeBase):
