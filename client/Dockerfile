@@ -6,5 +6,3 @@ WORKDIR /client
 COPY . .
 
 RUN pip install -r requirements.txt
-
-ENTRYPOINT ["reflex", "run", "--env", "prod"]

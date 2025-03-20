@@ -38,7 +38,7 @@ services:
       - ./redis:/data
 
     ports:
-      - '6379:6379'
+      - 6379:6379
 
     networks:
       - inner_network
@@ -57,7 +57,26 @@ services:
       - POSTGRES_DB=main
 
     ports:
-      - '5432:5432'
+      - 5432:5432
+
+    networks:
+      - inner_network
+
+  web-client:
+    build: client/
+    container_name: todoapp-client
+    restart: unless-stopped
+    command: reflex run
+
+    environment:
+      - TODOAPP_SERVER_HOST=server
+      - TODOAPP_SERVER_PORT=8080
+
+    ports:
+      - 3000:3000
+
+    depends_on:
+      - server
 
     networks:
       - inner_network
