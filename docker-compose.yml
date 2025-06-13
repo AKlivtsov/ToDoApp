@@ -22,7 +22,7 @@ services:
 
     depends_on:
       - db
-      - redis
+      - cachie
 
     links:
       - db
