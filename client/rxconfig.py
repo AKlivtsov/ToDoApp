@@ -6,6 +6,6 @@ load_dotenv()
 
 config = rx.Config(
     app_name="client",
-    TODOAPP_SERVER_HOST=os.getenv("TODOAPP_HOST"),
-    TODOAPP_SERVER_PORT=os.getenv("TODOAPP_PORT"),
+    TODOAPP_SERVER_HOST=os.getenv("TODOAPP_SERVER_HOST"),
+    TODOAPP_SERVER_PORT=os.getenv("TODOAPP_SERVER_PORT"),
 )
