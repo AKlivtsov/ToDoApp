@@ -5,7 +5,7 @@ from rxconfig import config
 
 class State(rx.State):
     is_loading: bool
-    _base_url: str = f"http://{config.TODOAPP_SERVER_HOST}:{config.TODOAPP_SERVER_PORT}"
+    _base_url: str = f"{config.TODOAPP_SERVER_HOST}:{config.TODOAPP_SERVER_PORT}"
     token: str
     tasks: list[dict[str, str]]
 
