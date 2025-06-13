@@ -1,11 +1,10 @@
 services:
-
   server:
     build: server/
     container_name: todoapp-server
     restart: unless-stopped
     command: python ./main.py
-    
+
     environment:
       - SERVER_ADDRESS=0.0.0.0:8080
 
@@ -23,14 +22,14 @@ services:
 
     depends_on:
       - db
-      - cachie
+      - redis
 
     links:
       - db
 
     networks:
       - inner_network
-  
+
   cachie:
     image: redis:alpine
     container_name: cachie-redis
@@ -49,7 +48,7 @@ services:
     container_name: db-postgres
     restart: unless-stopped
 
-    volumes: 
+    volumes:
       - db:/var/lib/postgresql/data
 
     environment:
