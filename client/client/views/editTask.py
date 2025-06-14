@@ -1,13 +1,14 @@
-import reflex as rx 
+import reflex as rx
 
 from client.state import State
+
 
 def edit_dialog(task: dict) -> rx.Component:
     return rx.dialog.root(
         rx.dialog.trigger(
             rx.button(
                 rx.icon("pencil", size=20),
-                color_scheme='indigo',
+                color_scheme="indigo",
                 radius="large",
                 align="center",
                 variant="surface",
@@ -25,8 +26,12 @@ def edit_dialog(task: dict) -> rx.Component:
                             width="40px",
                             size="1",
                             name="id",
-                            ),
-                        rx.text("is being edited!")
+                        ),
+                        rx.text("is being edited!"),
+                        rx.spacer(),
+                        rx.badge("Is visible to friends?"),
+                        rx.switch(name="showToFriends"),
+                        width="100%",
                     ),
                     rx.vstack(
                         rx.text(
@@ -65,36 +70,36 @@ def edit_dialog(task: dict) -> rx.Component:
                         width="100%",
                     ),
                     rx.hstack(
-                    rx.spacer(),
-                    rx.dialog.close(
-                        rx.button(
-                            "Save and exit",
-                            color_scheme='indigo',
-                            radius="large",
-                            align="center",
-                            variant="surface",
-                            padding="0.65rem",
-                            size="3", 
-                            type="submit",
+                        rx.spacer(),
+                        rx.dialog.close(
+                            rx.button(
+                                "Save and exit",
+                                color_scheme="indigo",
+                                radius="large",
+                                align="center",
+                                variant="surface",
+                                padding="0.65rem",
+                                size="3",
+                                type="submit",
                             ),
-                    ),
-                    rx.dialog.close(
-                        rx.button(
-                            "Exit without saving",
-                            color_scheme='ruby',
-                            radius="large",
-                            align="center",
-                            variant="surface",
-                            padding="0.65rem",
-                            size="3",
+                        ),
+                        rx.dialog.close(
+                            rx.button(
+                                "Exit without saving",
+                                color_scheme="ruby",
+                                radius="large",
+                                align="center",
+                                variant="surface",
+                                padding="0.65rem",
+                                size="3",
                             ),
+                        ),
+                        width="100%",
                     ),
-                    width="100%"
-                ),
                     spacing="4",
                 ),
                 on_submit=State.edit_task,
                 reset_on_submit=True,
             ),
-        )
+        ),
     )

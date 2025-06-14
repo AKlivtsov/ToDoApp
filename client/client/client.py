@@ -7,6 +7,8 @@ from .views.taskItem import task_item
 from .views.login import login_default
 from .views.reg import signup_default
 from .views.redirect import goto_login
+from .views.friends_list import friends_view
+from .views.profile import profile_setting
 
 
 @rx.page(route="/")
@@ -16,10 +18,7 @@ def index() -> rx.Component:
         rx.vstack(
             navbar(),
             rx.vstack(
-                rx.foreach(
-                    State.tasks,
-                    task_item
-                    ),
+                rx.foreach(State.tasks, task_item),
                 width="100%",
                 align="center",
             ),
@@ -27,16 +26,47 @@ def index() -> rx.Component:
         goto_login(),
     )
 
+
 @rx.page(route="/sign-in")
 def login() -> rx.Component:
     return rx.vstack(
-        login_default()
-        )
+        rx.spacer(),
+        login_default(),
+        width="100%",
+        align="center",
+    )
+
 
 @rx.page(route="/sign-up")
 def reg() -> rx.Component:
     return rx.vstack(
-        signup_default()
+        rx.spacer(),
+        signup_default(),
+        width="100%",
+        align="center",
+    )
+
+
+@rx.page(route="/friends")
+def friends() -> rx.Component:
+    return rx.vstack(
+        navbar(),
+        rx.vstack(
+            friends_view(),
+            width="100%",
+            align="center",
+        ),
+    )
+
+@rx.page(route="/profile")
+def profile() -> rx.Component:
+    return rx.vstack(
+        navbar(),
+        rx.vstack(
+            profile_setting(),
+            width="100%",
+            align="center",
         )
+    )
 
 app = rx.App()

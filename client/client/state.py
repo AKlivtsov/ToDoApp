@@ -8,6 +8,7 @@ class State(rx.State):
     _base_url: str = f"http://{config.TODOAPP_SERVER_HOST}:{config.TODOAPP_SERVER_PORT}"
     token: str
     tasks: list[dict[str, str]]
+    found_friends: list[dict[str, str]]
 
     @rx.event
     def log_out(self):
@@ -83,6 +84,10 @@ class State(rx.State):
     async def edit_task(self, task_data: dict):
         self.is_loading = True
         headers = {"Authorization": self.token}
+
+        if "showToFriends" not in task_data.keys():
+            task_data["showToFriends"] = "off"
+
         async with httpx.AsyncClient() as client:
             response = await client.put(
                 self._base_url + "/api/todos/" + task_data["id"],
@@ -95,5 +100,18 @@ class State(rx.State):
                 return rx.toast("Task updated.")
             else:
                 return rx.toast(
+                    f"Unknown error. Server have been returned code {response.status_code}"
+                )
+
+    @rx.event
+    async def handle_friend_search(self, search_data: dict):
+        headers = {"Authorization": self.token}
+        async with httpx.AsyncClient() as client:
+            response = await client.post(
+                self._base_url + "/api/friends", json=search_data, headers=headers
+            )
+
+            if response.status_code != 200:
+                yield rx.toast(
                     f"Unknown error. Server have been returned code {response.status_code}"
                 )
