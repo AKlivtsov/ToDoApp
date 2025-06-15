@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 import uvicorn
 import os
 
-from schemas import RegUser, LoginUser, Task
+from schemas import RegUser, LoginUser, Task, FriendId
 import repository as rep
 from cache import get_cached_user_id
 
@@ -132,6 +132,64 @@ def api_get_tasks(
         )
 
     tasks = rep.get_tasks(user_id=user_id, limit=int(limit), page=int(page))
+    return {"page": page, "limit": limit, "total": len(tasks), "data": tasks}
+
+
+@app.patch("/api/friends")
+def api_add_friend(
+    item: FriendId,
+    token: str = Header(..., description="Authorization token", alias="Authorization"),
+):
+
+    # auth
+    user_id = get_cached_user_id(token)
+    if not user_id:
+        return JSONResponse(
+            status_code=401,
+            content={"status": "error", "message": "Пользователь не авторизован."},
+        )
+    res = rep.add_friend(user_id=user_id, friend_id=item.model_dump()["id"])
+    if res:
+        return Response(status_code=200)
+    else:
+        return Response(status_code=400)
+
+
+@app.get("/api/friends")
+def api_get_awaitingFriends(
+    token: str = Header(..., description="Authorization token", alias="Authorization"),
+):
+
+    # auth
+    user_id = get_cached_user_id(token)
+    if not user_id:
+        return JSONResponse(
+            status_code=401,
+            content={"status": "error", "message": "Пользователь не авторизован."},
+        )
+
+    res = rep.get_awaitingFriends(user_id=user_id)
+    if res:
+        return {"total": len(res), "data": res}
+    else:
+        return Response(status_code=404)
+
+@app.get("api/todos/friends")
+def api_get_friendsTasks(
+    token: str = Header(..., description="Authorization token", alias="Authorization"),
+    page: str = Query(..., description="page", alias="Page"),
+    limit: str = Query(..., description="limit of the items", alias="Limit"),
+):
+
+    # auth
+    user_id = get_cached_user_id(token)
+    if not user_id:
+        return JSONResponse(
+            status_code=401,
+            content={"status": "error", "message": "Пользователь не авторизован."},
+        )
+
+    tasks = rep.get_friends_tasks(user_id=user_id, limit=int(limit), page=int(page))
     return {"page": page, "limit": limit, "total": len(tasks), "data": tasks}
 
 
